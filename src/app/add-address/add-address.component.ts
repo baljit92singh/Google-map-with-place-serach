@@ -3,15 +3,13 @@ import { FormGroup, FormBuilder } from '@angular/forms';
 import { MatDialogRef } from '@angular/material';
 import { CommonService } from '../common.service';
 import { MapsAPILoader } from '@agm/core';
-// declare var google;
-// declare var googlemaps
-// import {} from 'googlemaps'
 
 @Component({
   selector: 'app-add-address',
   templateUrl: './add-address.component.html',
   styleUrls: ['./add-address.component.css']
 })
+
 export class AddAddressComponent implements OnInit {
   @ViewChild('search')
   public serachElementRef: ElementRef
@@ -21,7 +19,6 @@ export class AddAddressComponent implements OnInit {
   latLongs = [];
   latitude: number;
   longitude: number;
-  zoom: number;
   constructor(public fb: FormBuilder,
     public dialogRef: MatDialogRef<AddAddressComponent>,
     public commonService: CommonService,
@@ -36,7 +33,6 @@ export class AddAddressComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.zoom = 5;
     this.longitude 
     // =38.8282;
     this.latitude
@@ -75,7 +71,6 @@ export class AddAddressComponent implements OnInit {
       navigator.geolocation.getCurrentPosition((position) => {
         this.latitude = position.coords.latitude;
         this.longitude = position.coords.longitude;
-        this.zoom = 5;
       })
     }
   }
