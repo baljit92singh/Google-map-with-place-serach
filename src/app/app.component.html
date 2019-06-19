@@ -4,10 +4,10 @@
     <mat-divider></mat-divider>
     <br>
     <mat-form-field class="example-full-width">
-        <input matInput placeholder="Work Location" aria-label="Address" [matAutocomplete]="auto" [formControl]="addressCtrl">
+        <input matInput placeholder="Work Location" aria-label="Address" (onSelectionChange)="selectionFunction($event)" [matAutocomplete]="auto" [formControl]="addressCtrl">
         <mat-autocomplete #auto="matAutocomplete">
-            <mat-option *ngFor="let address of filteredAddress | async" [value]="address.name">
-                <span>{{address.name}}</span>
+            <mat-option *ngFor="let address of filteredAddress | async" [value]="address">
+                <span>{{address}}</span>
             </mat-option>
             <mat-option (click)="openAddressDialog()">+ Add Address</mat-option>
         </mat-autocomplete>

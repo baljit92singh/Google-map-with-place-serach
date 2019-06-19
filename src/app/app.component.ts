@@ -28,8 +28,8 @@ export class AppComponent {
   locationChosen = false;
   viewType = 'roadmap'
   constructor(public dialog: MatDialog) {
-    // let address = JSON.parse(localStorage.getItem('addressLine1'))
-    // this.addresses.push(address)
+    let result = JSON.parse(localStorage.getItem('addressLine1'))
+    this.addresses.push(result)
     this.filteredAddress = this.addressCtrl.valueChanges
       .pipe(
         startWith(''),
@@ -53,7 +53,10 @@ export class AppComponent {
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed', result);
       if (result) {
-        localStorage.setItem("addressLine1", JSON.stringify(result.addressLine1));
+        // this.lat = 
+        // this.lng = 
+        this.addresses.push(result.addressLine1)
+        localStorage.setItem("addressLine1", JSON.stringify(this.addresses));
         //...
         // var storedNames = JSON.parse(localStorage.getItem("names"));
       }
@@ -91,6 +94,10 @@ export class AppComponent {
         this.zoom = 15;
       });
     }
+  }
+
+  selectionFunction(event){
+    console.log(event)
   }
 }
 
