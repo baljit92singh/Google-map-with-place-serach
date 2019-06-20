@@ -41,7 +41,12 @@ export class AppComponent {
     this.addressLocalForm = this.fb.group({
       addressCtrl: new FormControl("")
     })
-    this.addressList = JSON.parse(localStorage.getItem('addressList'))
+    if (JSON.parse(localStorage.getItem('addressList'))) {
+      this.addressList = JSON.parse(localStorage.getItem('addressList'))
+    } else {
+      console.log("there is noting in local storage.")
+    }
+
     this.setCurrentLocation();
   }
 
@@ -55,8 +60,11 @@ export class AppComponent {
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed', result);
       if (result) {
-        this.addressList.push(result)
+        let response = result.addressLine1
+        console.log(result.addressLine1)
+        this.addressList.push(response)
         localStorage.setItem("addressLine1", JSON.stringify(this.addressList));
+        
       }
     });
   }
