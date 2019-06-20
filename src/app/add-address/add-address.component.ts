@@ -19,6 +19,7 @@ export class AddAddressComponent implements OnInit {
   latLongs = [];
   latitude: number;
   longitude: number;
+  zoom: number;
   constructor(public fb: FormBuilder,
     public dialogRef: MatDialogRef<AddAddressComponent>,
     public commonService: CommonService,
@@ -31,39 +32,60 @@ export class AddAddressComponent implements OnInit {
     })
 
   }
-
+  private geoCoder;
   ngOnInit() {
-    this.longitude 
+    this.longitude
     // =38.8282;
     this.latitude
     //  =-98.5795;
-    this.addressForm.controls['addressLine1'].valueChanges
-      .subscribe(res => {
-
-        console.log(res);
-      })
     this.mapsAPILoader.load().then(() => {
+      this.geoCoder = new google.maps.Geocoder;
       console.log(this.serachElementRef.nativeElement);
       const autocomplete = new google.maps.places.Autocomplete(this.serachElementRef.nativeElement, {
-        types: [],
+        types: ["address"],
         componentRestrictions: { 'country': 'IN' }
       });
       console.log(autocomplete);
       autocomplete.addListener('place_changed', () => {
         this.zone.run(() => {
-          const place: google.maps.places.PlaceResult = autocomplete.getPlace();
+          let place: google.maps.places.PlaceResult = autocomplete.getPlace();
+          console.log(place)
+          this.addressForm.controls['addressLine1'].setValue(place.name)
           if (place.geometry === undefined || place.geometry === null) {
             return;
           }
-          const latlong = {
-            latitude: place.geometry.location.lat,
-            longitude: place.geometry.location.lng
-          }
-          this.latLongs.push(latlong)
-          console.log(this.latLongs)
+          console.log(place)
+          // const latlong = {
+          //   latitude: place.geometry.location.lat,
+          //   longitude: place.geometry.location.lng
+          // }
+          this.latitude = place.geometry.location.lat();
+          this.longitude = place.geometry.location.lng();
+          // this.latLongs.push(latlong)
+          console.log(this.latitude)
+          console.log(this.longitude)
         })
       })
     })
+  }
+
+  getAddress(latitude, longitude) {
+    this.geoCoder.geocode({ 'location': { lat: latitude, lng: longitude } }, (results, status) => {
+      console.log(results);
+      console.log(status);
+      if (status === 'OK') {
+        if (results[0]) {
+          console.log(results)
+          this.zoom = 15;
+          // this.address = results[0].formatted_address;
+        } else {
+          window.alert('No results found');
+        }
+      } else {
+        window.alert('Geocoder failed due to: ' + status);
+      }
+
+    });
   }
 
   setCurrentPosition() {
@@ -71,14 +93,21 @@ export class AddAddressComponent implements OnInit {
       navigator.geolocation.getCurrentPosition((position) => {
         this.latitude = position.coords.latitude;
         this.longitude = position.coords.longitude;
+        this.zoom = 15;
+        this.getAddress(this.latitude, this.longitude);
       })
     }
   }
 
   saveAddress() {
+    var localData = {
+      addressLine1: this.addressForm.controls['addressLine1'].value,
+      latitude: this.latitude,
+      longitude: this.longitude
+    }
     let item = {
       addressType: this.addressForm.controls['addressType'].value,
-      addressLine1: this.addressForm.controls['addressLine1'].value,
+      addressLine1: localData,
       addressLine2: this.addressForm.controls['addressLine2'].value,
     }
     this.dialogRef.close(item);

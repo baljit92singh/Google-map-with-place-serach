@@ -1,13 +1,15 @@
 import { Component } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { FormControl, FormGroup, FormBuilder } from '@angular/forms';
 import { Observable } from 'rxjs';
-import { map, startWith } from 'rxjs/operators';
+import { map, startWith, debounceTime, distinctUntilChanged, filter, switchMap } from 'rxjs/operators';
 import { MatDialog } from '@angular/material';
 import { AddAddressComponent } from './add-address/add-address.component';
 
-export interface Address {
-  addressLine1: any;
-}
+// export class marker {
+//   addressLine1: string
+//   latitude: number
+//   longitude: number
+// }
 
 @Component({
   selector: 'app-root',
@@ -17,9 +19,16 @@ export interface Address {
 
 export class AppComponent {
   title = 'map-serach';
+  addressLocalForm: FormGroup
   addressCtrl = new FormControl();
-  filteredAddress: Observable<Address[]>;
-  addresses: Address[] = [];
+  addressList = []
+  //  = [
+  //   {
+  //     addressLine1: "",
+  //     latitude: "",
+  //     longitude: ""
+  //   }
+  // ];
   // lat = 22.7196;
   // lng = 75.8577;
   lat;
@@ -27,22 +36,15 @@ export class AppComponent {
   zoom: number;
   locationChosen = false;
   viewType = 'roadmap'
-  constructor(public dialog: MatDialog) {
-    let result = JSON.parse(localStorage.getItem('addressLine1'))
-    this.addresses.push(result)
-    this.filteredAddress = this.addressCtrl.valueChanges
-      .pipe(
-        startWith(''),
-        map(address => address ? this._filterStates(address) : this.addresses.slice())
-      );
+  searchData = [];
+  constructor(public dialog: MatDialog, public fb: FormBuilder) {
+    this.addressLocalForm = this.fb.group({
+      addressCtrl: new FormControl("")
+    })
+    this.addressList = JSON.parse(localStorage.getItem('addressList'))
     this.setCurrentLocation();
   }
 
-  private _filterStates(value: string): Address[] {
-    const filterValue = value.toLowerCase();
-
-    return this.addresses.filter(address => address.addressLine1.toLowerCase().indexOf(filterValue) === 0);
-  }
 
   openAddressDialog() {
     const dialogRef = this.dialog.open(AddAddressComponent, {
@@ -53,12 +55,8 @@ export class AppComponent {
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed', result);
       if (result) {
-        // this.lat = 
-        // this.lng = 
-        this.addresses.push(result.addressLine1)
-        localStorage.setItem("addressLine1", JSON.stringify(this.addresses));
-        //...
-        // var storedNames = JSON.parse(localStorage.getItem("names"));
+        this.addressList.push(result)
+        localStorage.setItem("addressLine1", JSON.stringify(this.addressList));
       }
     });
   }
@@ -96,8 +94,8 @@ export class AppComponent {
     }
   }
 
-  selectionFunction(event){
-    console.log(event)
+  selectionFunction(event) {
+    console.log(event.source.value)
   }
 }
 

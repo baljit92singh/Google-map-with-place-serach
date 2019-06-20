@@ -9,11 +9,13 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { AddAddressComponent } from './add-address/add-address.component';
 import { AgmCoreModule } from '@agm/core';
 import { HttpClientModule } from '@angular/common/http';
+import { FilterPipe } from './other/filter';
 
 @NgModule({
   declarations: [
     AppComponent,
     AddAddressComponent,
+    FilterPipe
   ],
   imports: [
     BrowserModule,
@@ -23,7 +25,7 @@ import { HttpClientModule } from '@angular/common/http';
     ReactiveFormsModule,
     FormsModule,
     AgmCoreModule.forRoot({
-      apiKey: 'YOUR_API_KEY',
+      apiKey: 'AIzaSyArh5jEBozuPKnWbFgZJbbJD-sAKU-2_PQ',
       libraries: ['places']
     }),
     HttpClientModule,
