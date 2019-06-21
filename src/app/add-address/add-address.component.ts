@@ -97,4 +97,9 @@ export class AddAddressComponent implements OnInit {
     }
     this.dialogRef.close(item);
   }
+
+
+  onNoClick(): void {
+    this.dialogRef.close();
+  }
 }
