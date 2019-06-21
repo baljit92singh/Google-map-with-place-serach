@@ -34,4 +34,5 @@ import { FilterPipe } from './other/filter';
   entryComponents: [AddAddressComponent],
   bootstrap: [AppComponent]
 })
+
 export class AppModule { }
