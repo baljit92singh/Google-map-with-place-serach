@@ -40,30 +40,19 @@ export class AddAddressComponent implements OnInit {
     //  =-98.5795;
     this.mapsAPILoader.load().then(() => {
       this.geoCoder = new google.maps.Geocoder;
-      console.log(this.serachElementRef.nativeElement);
       const autocomplete = new google.maps.places.Autocomplete(this.serachElementRef.nativeElement, {
         types: ["address"],
         componentRestrictions: { 'country': 'IN' }
       });
-      console.log(autocomplete);
       autocomplete.addListener('place_changed', () => {
         this.zone.run(() => {
           let place: google.maps.places.PlaceResult = autocomplete.getPlace();
-          console.log(place)
           this.addressForm.controls['addressLine1'].setValue(place.name)
           if (place.geometry === undefined || place.geometry === null) {
             return;
           }
-          console.log(place)
-          // const latlong = {
-          //   latitude: place.geometry.location.lat,
-          //   longitude: place.geometry.location.lng
-          // }
           this.latitude = place.geometry.location.lat();
           this.longitude = place.geometry.location.lng();
-          // this.latLongs.push(latlong)
-          console.log(this.latitude)
-          console.log(this.longitude)
         })
       })
     })
@@ -71,13 +60,9 @@ export class AddAddressComponent implements OnInit {
 
   getAddress(latitude, longitude) {
     this.geoCoder.geocode({ 'location': { lat: latitude, lng: longitude } }, (results, status) => {
-      console.log(results);
-      console.log(status);
       if (status === 'OK') {
         if (results[0]) {
-          console.log(results)
           this.zoom = 15;
-          // this.address = results[0].formatted_address;
         } else {
           window.alert('No results found');
         }
@@ -111,6 +96,5 @@ export class AddAddressComponent implements OnInit {
       addressLine2: this.addressForm.controls['addressLine2'].value,
     }
     this.dialogRef.close(item);
-    console.log(item)
   }
 }

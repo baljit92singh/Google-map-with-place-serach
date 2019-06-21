@@ -25,7 +25,7 @@ import { FilterPipe } from './other/filter';
     ReactiveFormsModule,
     FormsModule,
     AgmCoreModule.forRoot({
-      apiKey: 'AIzaSyArh5jEBozuPKnWbFgZJbbJD-sAKU-2_PQ',
+      apiKey: 'YOUR_API_KEY',
       libraries: ['places']
     }),
     HttpClientModule,
