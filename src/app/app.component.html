@@ -19,9 +19,9 @@
     <agm-map [latitude]="lat" [longitude]="lng" [mapTypeId]="viewType" (mapClick)="onChoseLocation($event)" [zoom]="zoom">
         <agm-marker [latitude]="lat" [longitude]="lng"></agm-marker>
     </agm-map>
-    <!-- <div style="float:left ;">
+    <div style="float:left ;">
         <button mat-raised-button (click)="capture()" color="primary">Capture</button>
-    </div> -->
+    </div>
     <div style="float:right;">
         <button mat-raised-button (click)="tarrain()" color="primary">Tarrain</button>
         <button mat-raised-button (click)="satellite()" color="primary">Satellite</button>

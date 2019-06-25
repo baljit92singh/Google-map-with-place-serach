@@ -73,6 +73,16 @@ export class AppComponent implements OnInit {
 
   capture() {
     // this.viewType
+    let apiUrl = 'http://maps.google.com/?q=' + this.lat + ',' + this.lng
+    console.log(apiUrl)
+    var filename = "image.jpg"
+    var pom = document.createElement('a');
+    pom.setAttribute('href', 'data:image/jpeg,');
+    pom.setAttribute('download', filename);
+    pom.style.display = 'none';
+    document.body.appendChild(pom);
+    pom.click();
+    document.body.removeChild(pom);
   }
 
   tarrain() {
